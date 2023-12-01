@@ -5,23 +5,16 @@ use actix_web::{
 };
 
 pub fn configure(cfg: &mut ServiceConfig) {
-    cfg.service(one_two_three);
+    cfg.service(cube_the_bits);
 }
 
 #[get("/1/{slug:(\\d+/?)+}")]
-async fn one_two_three(path: web::Path<String>) -> impl Responder {
-    let slug = path.into_inner();
-
-    let nums = slug
+async fn cube_the_bits(path: web::Path<String>) -> impl Responder {
+    path.into_inner()
         .split('/')
         .map(|s| s.parse::<i32>().unwrap())
-        .collect::<Vec<_>>();
-
-    let mut xor = nums[0];
-
-    for num in nums.iter().skip(1) {
-        xor ^= num;
-    }
-
-    (xor * xor * xor).to_string()
+        .reduce(|a, b| a ^ b)
+        .unwrap()
+        .pow(3)
+        .to_string()
 }
