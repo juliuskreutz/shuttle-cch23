@@ -12,7 +12,7 @@ pub fn configure(cfg: &mut ServiceConfig) {
 async fn cube_the_bits(path: web::Path<String>) -> impl Responder {
     path.into_inner()
         .split('/')
-        .map(|s| s.parse::<i32>().unwrap())
+        .flat_map(str::parse::<i32>)
         .reduce(|a, b| a ^ b)
         .unwrap()
         .pow(3)
