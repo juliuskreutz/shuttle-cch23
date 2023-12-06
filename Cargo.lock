@@ -446,6 +446,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "ordered-float",
+ "regex",
  "serde",
  "serde_json",
  "shuttle-actix-web",
