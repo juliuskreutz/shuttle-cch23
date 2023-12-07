@@ -3,9 +3,12 @@ mod day01;
 mod day04;
 mod day05;
 mod day06;
+mod day07;
 
 use actix_web::web::ServiceConfig;
 use shuttle_actix_web::ShuttleActixWeb;
+
+type ShuttleResult<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[shuttle_runtime::main]
 async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
@@ -14,7 +17,8 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clon
             .configure(day01::configure)
             .configure(day04::configure)
             .configure(day05::configure)
-            .configure(day06::configure);
+            .configure(day06::configure)
+            .configure(day07::configure);
     };
 
     Ok(config.into())

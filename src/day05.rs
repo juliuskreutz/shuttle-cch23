@@ -1,10 +1,3 @@
-use actix_web::{get, web::ServiceConfig, Responder};
+use actix_web::web::ServiceConfig;
 
-pub fn configure(cfg: &mut ServiceConfig) {
-    cfg.service(index);
-}
-
-#[get("/5")]
-async fn index() -> impl Responder {
-    "Day05"
-}
+pub fn configure(_cfg: &mut ServiceConfig) {}
