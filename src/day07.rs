@@ -16,9 +16,9 @@ async fn decode(request: HttpRequest) -> ShuttleResult<impl Responder> {
     let cookie = request.cookie("recipe").context("No recipe cookie")?;
     let encoded = cookie.value();
 
-    let decoded = String::from_utf8(general_purpose::STANDARD.decode(encoded)?)?;
+    let decoded = general_purpose::STANDARD.decode(encoded)?;
 
-    Ok(HttpResponse::Ok().json(serde_json::from_str::<Value>(&decoded)?))
+    Ok(HttpResponse::Ok().json(serde_json::from_slice::<Value>(&decoded)?))
 }
 
 #[derive(serde::Deserialize)]
@@ -32,8 +32,8 @@ async fn bake(request: HttpRequest) -> ShuttleResult<impl Responder> {
     let cookie = request.cookie("recipe").context("No recipe cookie")?;
     let encoded = cookie.value();
 
-    let decoded = String::from_utf8(general_purpose::STANDARD.decode(encoded)?)?;
-    let mut recipe: Recipe = serde_json::from_str(&decoded)?;
+    let decoded = general_purpose::STANDARD.decode(encoded)?;
+    let mut recipe: Recipe = serde_json::from_slice(&decoded)?;
 
     let mut count = 0;
     'outer: loop {
