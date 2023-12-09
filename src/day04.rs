@@ -9,10 +9,11 @@ pub fn configure(cfg: &mut ServiceConfig) {
     cfg.service(strength).service(contest);
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
 struct Reindeer {
     name: String,
-    strength: i32,
+    strength: usize,
     speed: OrderedFloat<f64>,
     height: usize,
     antler_width: usize,
@@ -24,7 +25,11 @@ struct Reindeer {
 
 #[post("/4/strength")]
 async fn strength(reindeer: web::Json<Vec<Reindeer>>) -> impl Responder {
-    reindeer.iter().map(|r| r.strength).sum::<i32>().to_string()
+    reindeer
+        .iter()
+        .map(|r| r.strength)
+        .sum::<usize>()
+        .to_string()
 }
 
 #[post("/4/contest")]
