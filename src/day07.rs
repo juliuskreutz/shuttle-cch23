@@ -22,7 +22,7 @@ async fn decode(request: HttpRequest) -> ShuttleResult<impl Responder> {
 }
 
 #[derive(serde::Deserialize)]
-struct Recipe {
+struct Bake {
     recipe: HashMap<String, usize>,
     pantry: HashMap<String, usize>,
 }
@@ -33,27 +33,25 @@ async fn bake(request: HttpRequest) -> ShuttleResult<impl Responder> {
     let encoded = cookie.value();
 
     let decoded = general_purpose::STANDARD.decode(encoded)?;
-    let mut recipe: Recipe = serde_json::from_slice(&decoded)?;
+    let mut bake: Bake = serde_json::from_slice(&decoded)?;
 
-    let mut count = 0;
-    'outer: loop {
-        for (key, &value) in &recipe.recipe {
-            if recipe.pantry.get(key).copied().unwrap_or_default() < value {
-                break 'outer;
-            }
+    let cookies = bake
+        .recipe
+        .iter()
+        .map(|(k, &v)| bake.pantry.get(k).map(|&a| a / v).unwrap_or_default())
+        .min()
+        .unwrap_or_default();
+
+    for (key, &value) in &bake.recipe {
+        if let Some(p) = bake.pantry.get_mut(key) {
+            *p -= cookies * value;
         }
-
-        for (key, &value) in &recipe.recipe {
-            *recipe.pantry.get_mut(key).unwrap() -= value;
-        }
-
-        count += 1;
     }
 
     Ok(HttpResponse::Ok().json(serde_json::json!(
         {
-            "count": count,
-            "pantry": recipe.pantry,
+            "cookies": cookies,
+            "pantry": bake.pantry,
         }
     )))
 }
