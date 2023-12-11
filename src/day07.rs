@@ -38,7 +38,13 @@ async fn bake(request: HttpRequest) -> ShuttleResult<impl Responder> {
     let cookies = bake
         .recipe
         .iter()
-        .map(|(k, &v)| bake.pantry.get(k).map(|&a| a / v).unwrap_or_default())
+        .map(|(k, &v)| {
+            if v == 0 {
+                usize::MAX
+            } else {
+                bake.pantry.get(k).map(|&a| a / v).unwrap_or_default()
+            }
+        })
         .min()
         .unwrap_or_default();
 
