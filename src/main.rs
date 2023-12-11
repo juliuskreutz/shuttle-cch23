@@ -5,6 +5,7 @@ mod day05;
 mod day06;
 mod day07;
 mod day08;
+mod day11;
 
 use actix_web::web::ServiceConfig;
 use shuttle_actix_web::ShuttleActixWeb;
@@ -20,7 +21,8 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clon
             .configure(day05::configure)
             .configure(day06::configure)
             .configure(day07::configure)
-            .configure(day08::configure);
+            .configure(day08::configure)
+            .configure(day11::configure);
     };
 
     Ok(config.into())
