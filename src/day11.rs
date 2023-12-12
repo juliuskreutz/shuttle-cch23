@@ -24,7 +24,9 @@ struct File {
 #[post("/11/red_pixels")]
 async fn red_pixels(MultipartForm(file): MultipartForm<File>) -> ShuttleResult<impl Responder> {
     let reader = BufReader::new(&file.image.file);
-    let image = image::load(reader, image::ImageFormat::Png)?;
+    let image = image::io::Reader::new(reader)
+        .with_guessed_format()?
+        .decode()?;
 
     let mut count = 0;
     for (_, _, Rgba([r, g, b, _])) in image.pixels() {
