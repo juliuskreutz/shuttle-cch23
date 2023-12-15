@@ -9,10 +9,13 @@ mod day11;
 mod day12;
 mod day13;
 mod day14;
+mod day15;
 
 use actix_web::web::{Data, ServiceConfig};
 use shuttle_actix_web::ShuttleActixWeb;
 use sqlx::PgPool;
+#[macro_use]
+extern crate tracing;
 
 type ShuttleResult<T> = Result<T, Box<dyn std::error::Error>>;
 
@@ -33,6 +36,7 @@ async fn main(
             .configure(day12::configure)
             .configure(day13::configure)
             .configure(day14::configure)
+            .configure(day15::configure)
             .app_data(Data::new(pool.clone()));
     };
 
