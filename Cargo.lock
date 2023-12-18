@@ -602,7 +602,6 @@ dependencies = [
  "tracing",
  "ulid",
  "unic-emoji-char",
- "urlencoding",
  "uuid",
 ]
 
@@ -2721,9 +2720,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-actix-web"
-version = "0.35.0"
+version = "0.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b277e3828b52f2c159906b59833167de31c6cb86a62f5a7b613f7acafe72ce41"
+checksum = "7ca8b5015eaea3b3bc38078936dc21dbc46a352e736319c80e4422a77c31dcc4"
 dependencies = [
  "actix-web",
  "num_cpus",
@@ -2732,9 +2731,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-codegen"
-version = "0.35.0"
+version = "0.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd0aa40ce33e1b1aec9c3842ce309c2de14ee366fc94d90950881f7043005c99"
+checksum = "1b99c06b8adfb88b971c2bc2662252a6ec85f4e041c7b0add64499fbdfd71b18"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -2788,9 +2787,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-proto"
-version = "0.35.0"
+version = "0.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "007fee4c4a09cb60e2e6af3136c80ccae49e45d421677bd861815f1d264d65a1"
+checksum = "f86275eabcc469d6749d4dc2e091f6e120f04fde813cf7002e5dc60158ce571b"
 dependencies = [
  "futures-core",
  "prost 0.12.3",
@@ -2801,9 +2800,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-runtime"
-version = "0.35.0"
+version = "0.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69d171a6a029eccc0c7a56a8a6de693a4d29278656a0f893207a6bf40f3a8804"
+checksum = "e057c62f2f77368591117411e8de4458f6df33d0c157875c96025c2435e0811f"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3397,9 +3396,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.34.0"
+version = "1.35.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0c014766411e834f7af5b8f4cf46257aab4036ca95e9d2c144a10f59ad6f5b9"
+checksum = "841d45b238a16291a4e1584e61820b8ae57d696cc5015c459c229ccc6990cc1c"
 dependencies = [
  "backtrace",
  "bytes",

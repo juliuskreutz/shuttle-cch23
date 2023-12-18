@@ -10,7 +10,8 @@ use crate::ShuttleResult;
 pub fn configure(cfg: &mut ServiceConfig) {
     cfg.service(sql)
         .service(reset)
-        .service(orders)
+        .service(web::resource("/13/orders").route(web::post().to(orders)))
+        .service(web::resource("/18/orders").route(web::post().to(orders)))
         .service(orders_total)
         .service(orders_popular);
 }
@@ -33,11 +34,11 @@ async fn reset(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder> {
 
     sqlx::query!(
         "CREATE TABLE orders (
-  id INT PRIMARY KEY,
-  region_id INT,
-  gift_name VARCHAR(50),
-  quantity INT
-)"
+            id INT PRIMARY KEY,
+            region_id INT,
+            gift_name VARCHAR(50),
+            quantity INT
+        )"
     )
     .execute(pool.as_ref())
     .await?;
@@ -53,7 +54,6 @@ struct Order {
     quantity: i32,
 }
 
-#[post("/13/orders")]
 async fn orders(
     orders: web::Json<Vec<Order>>,
     pool: web::Data<PgPool>,
@@ -87,10 +87,20 @@ async fn orders_total(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder> 
 #[get("/13/orders/popular")]
 async fn orders_popular(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder> {
     let name = sqlx::query!(
-        "SELECT gift_name, SUM(quantity) total FROM orders GROUP BY gift_name ORDER BY total DESC LIMIT 1"
+        "SELECT 
+            gift_name, SUM(quantity) total 
+        FROM 
+            orders 
+        GROUP BY 
+            gift_name 
+        ORDER BY 
+            total 
+        DESC LIMIT 1"
     )
     .fetch_one(pool.as_ref())
-    .await.ok().and_then(|record| record.gift_name);
+    .await
+    .ok()
+    .and_then(|record| record.gift_name);
 
     Ok(HttpResponse::Ok().json(serde_json::json!({ "popular": name })))
 }
