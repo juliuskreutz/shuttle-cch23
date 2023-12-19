@@ -49,7 +49,7 @@ async fn reset(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder> {
 #[derive(serde::Deserialize)]
 struct Region {
     id: i32,
-    name: Option<String>,
+    name: String,
 }
 
 #[post("/18/regions")]
@@ -72,8 +72,8 @@ async fn regions(
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct RegionTotal {
-    region: Option<String>,
-    total: Option<i64>,
+    region: String,
+    total: i64,
 }
 
 #[get("/18/regions/total")]
@@ -81,7 +81,7 @@ async fn regions_total(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder>
     let regions_total = sqlx::query_as!(
         RegionTotal,
         "SELECT 
-            name region, SUM(quantity) total 
+            name \"region!\", SUM(quantity) \"total!\" 
         FROM 
             orders 
         JOIN 
@@ -101,12 +101,12 @@ async fn regions_total(pool: web::Data<PgPool>) -> ShuttleResult<impl Responder>
 
 #[derive(serde::Serialize)]
 struct RegionTopList {
-    region: Option<String>,
-    top_gifts: Option<Vec<String>>,
+    region: String,
+    top_gifts: Vec<String>,
 }
 
 struct TopGift {
-    gift_name: Option<String>,
+    gift_name: String,
 }
 
 #[get("/18/regions/top_list/{number}")]
@@ -116,7 +116,7 @@ async fn regions_top_list(
 ) -> ShuttleResult<impl Responder> {
     let number = number.into_inner();
 
-    let all_regions = sqlx::query_as!(Region, "SELECT * FROM regions")
+    let all_regions = sqlx::query_as!(Region, "SELECT id, name \"name!\" FROM regions")
         .fetch_all(pool.as_ref())
         .await?;
 
@@ -125,7 +125,7 @@ async fn regions_top_list(
         let top_gifts = sqlx::query_as!(
             TopGift,
             "SELECT 
-                gift_name 
+                gift_name \"gift_name!\"
             FROM 
                 orders 
             WHERE 
